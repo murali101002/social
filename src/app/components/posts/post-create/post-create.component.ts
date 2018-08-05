@@ -1,12 +1,12 @@
-import { PostService } from './../../../services/post/post.service';
 import { Post } from './../post.model';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { PostService } from '../../../services/post/post.service';
+import { NgForm } from '../../../../../node_modules/@angular/forms';
 
 @Component({
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
-  styleUrls: ['./post-create.component.css'],
-  providers: [PostService]
+  styleUrls: ['./post-create.component.css']
 })
 export class PostCreateComponent implements OnInit {
 
@@ -18,13 +18,12 @@ export class PostCreateComponent implements OnInit {
   ngOnInit() {
 
   }
-  createPost(form) {
+  createPost(form: NgForm) {
     if (form.invalid) {
       return;
     }
-    const post: Post = {title: form.value.title, content: form.value.content};
-    this.postService.addPost(post);
-    // form.reset();
+    this.postService.addPost(form.value.title, form.value.content);
+    form.resetForm();
   }
 
 }

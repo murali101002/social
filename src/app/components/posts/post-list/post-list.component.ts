@@ -6,20 +6,27 @@ import { Subscription } from '../../../../../node_modules/rxjs';
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.css'],
-  providers: [PostService]
+  styleUrls: ['./post-list.component.css']
 })
 export class PostListComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
-  private subscription: Subscription;
+  private postsSub: Subscription;
 
-  constructor(public postService: PostService) {}
+  constructor(public postsService: PostService) {}
 
   ngOnInit() {
-    // this.postService.getUpdatedPostsAsObservable().subscribe(posts => console.log('posts', posts));
-    this.posts = this.postService.getPosts();
+    this.postsService.getPosts();
+    this.postsSub = this.postsService.getPostUpdateListener()
+      .subscribe((posts: Post[]) => {
+        this.posts = posts;
+      });
   }
+
+  onDelete(postId) {
+    this.postsService.deletePost(postId);
+  }
+
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.postsSub.unsubscribe();
   }
 }
