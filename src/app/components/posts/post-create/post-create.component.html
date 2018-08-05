@@ -1,4 +1,5 @@
 <mat-card>
+  <mat-spinner *ngIf='isLoading'></mat-spinner>
   <!-- ngForm directive gives access to only form instead of entire HTML -->
   <form (submit)='createPost(postForm)' #postForm='ngForm'>
     <mat-form-field>
