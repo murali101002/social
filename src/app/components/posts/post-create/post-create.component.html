@@ -4,12 +4,12 @@
     <mat-form-field>
       <!-- [(ngModel)] can be replaced with ngModel in form where name is what binds the value -->
       <!-- <input type="text" matInput [(ngModel)]='postTitle'> -->
-      <input placeholder="Title" type="text" matInput ngModel name="title" #title='ngModel' required>
+      <input placeholder="Title" type="text" matInput [ngModel]='post?.title' name="title" #title='ngModel' required>
       <mat-error *ngIf="title.invalid">Please enter valid Title</mat-error>
     </mat-form-field>
     <mat-form-field>
       <!-- <textarea matInput [(ngModel)]='postText'></textarea> -->
-      <textarea placeholder="Post Content" matInput ngModel name="content" #content='ngModel' required></textarea>
+      <textarea placeholder="Post Content" matInput [ngModel]='post?.content' name="content" #content='ngModel' required></textarea>
       <mat-error *ngIf="content.invalid">Please enter valid Content</mat-error>
     </mat-form-field>
     <button mat-raised-button color='accent' type="submit">Submit</button>
