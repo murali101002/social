@@ -1,17 +1,24 @@
 <mat-card>
   <mat-spinner *ngIf='isLoading'></mat-spinner>
   <!-- ngForm directive gives access to only form instead of entire HTML -->
-  <form (submit)='createPost(postForm)' #postForm='ngForm'>
+  <form [formGroup]='form' (submit)='onSubmit()'>
     <mat-form-field>
       <!-- [(ngModel)] can be replaced with ngModel in form where name is what binds the value -->
       <!-- <input type="text" matInput [(ngModel)]='postTitle'> -->
-      <input placeholder="Title" type="text" matInput [ngModel]='post?.title' name="title" #title='ngModel' required>
-      <mat-error *ngIf="title.invalid">Please enter valid Title</mat-error>
+      <input placeholder="Title" type="text" matInput formControlName='title'>
+      <mat-error *ngIf="form.get('title').invalid">Please enter valid Title</mat-error>
     </mat-form-field>
+    <div>
+      <button mat-stroked-button color='primary' (click)='fileInput.click()' type="button">Image</button>
+      <input type="file" #fileInput (change)='onFileInputChanged($event)'>
+    </div>
+    <div class="image-preview" *ngIf='imagePreview && imagePreview !== "" && form.get("image").valid'>
+      <img [src]="imagePreview" [alt]='form.value.title'>
+    </div>
     <mat-form-field>
       <!-- <textarea matInput [(ngModel)]='postText'></textarea> -->
-      <textarea placeholder="Post Content" matInput [ngModel]='post?.content' name="content" #content='ngModel' required></textarea>
-      <mat-error *ngIf="content.invalid">Please enter valid Content</mat-error>
+      <textarea placeholder="Post Content" matInput formControlName='content'></textarea>
+      <mat-error *ngIf="form.get('content').invalid">Please enter valid Content</mat-error>
     </mat-form-field>
     <button mat-raised-button color='accent' type="submit">Submit</button>
   </form>

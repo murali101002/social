@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require('path');
 
 const app = express();
 
@@ -45,6 +46,11 @@ app.use((req, res, next) => {
   );
   next();
 });
+/*
+requests with /images were allowed to access the images folder in backend
+path helps in mapping images -> backend/images
+*/
+app.use('/images', express.static(path.join('backend/images')));
 
 app.use('/api/posts', postsRoutes);
 
