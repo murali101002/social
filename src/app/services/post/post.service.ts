@@ -1,4 +1,4 @@
-import { Post } from "./../../components/posts/post.model";
+import { Post } from "../../components/posts/post.model";
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { map } from "rxjs/operators";

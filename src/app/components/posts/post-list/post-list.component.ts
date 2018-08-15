@@ -1,8 +1,9 @@
-import { PostService } from './../../../services/post/post.service';
-import { Post } from './../post.model';
+import { AuthService } from './../../../services/auth/auth.service';
+import { PostService } from '../../../services/post/post.service';
+import { Post } from '../post.model';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Subscription } from '../../../../../node_modules/rxjs';
-import { PageEvent } from '../../../../../node_modules/@angular/material';
+import { Subscription } from 'rxjs';
+import { PageEvent } from '@angular/material';
 
 @Component({
   selector: 'app-post-list',
@@ -11,7 +12,8 @@ import { PageEvent } from '../../../../../node_modules/@angular/material';
 })
 export class PostListComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
-  private postsSub: Subscription;
+  private postsSub: Subscription[] = [];
+  isAuthenticated: boolean;
   public isLoading = false;
 
   // pagination variables
@@ -20,17 +22,20 @@ export class PostListComponent implements OnInit, OnDestroy {
   pageSizeOptions = [2, 5, 10];
   length = 0;
 
-  constructor(public postsService: PostService) {}
+  constructor(public postsService: PostService, private authService: AuthService) {}
 
   ngOnInit() {
     this.isLoading = true;
     this.postsService.getPosts(this.pageSize, this.currPage);
     this.isLoading = false;
-    this.postsSub = this.postsService.getPostUpdateListener()
+    this.postsSub.push(this.postsService.getPostUpdateListener()
       .subscribe((postsData: {posts: Post[], postsCount: number}) => {
         this.length = postsData.postsCount;
         this.posts = postsData.posts;
-      });
+      }));
+    this.postsSub.push(this.authService.getAuthStatusListener().subscribe(response => {
+      this.isAuthenticated = response;
+    }));
   }
 
   onDelete(postId) {
@@ -43,6 +48,6 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.postsSub.unsubscribe();
+    this.postsSub.map(sub => sub.unsubscribe());
   }
 }

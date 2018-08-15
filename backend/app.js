@@ -7,6 +7,7 @@ const path = require('path');
 const app = express();
 
 const postsRoutes = require('./routes/posts');
+const usersRoutes = require('./routes/users');
 
 
 mongoose.connect(
@@ -53,5 +54,6 @@ path helps in mapping images -> backend/images
 app.use('/images', express.static(path.join('backend/images')));
 
 app.use('/api/posts', postsRoutes);
+app.use('/api/users', usersRoutes);
 
 module.exports = app;

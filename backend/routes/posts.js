@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-// const moment = require('moment');
+/*
+used to check api requests for valid jwt to secure routes
+we secure post/delete routes and open get routes
+*/
+const checkAuthMiddleware = require('../middleware/check-auth');
 
 const MIME_TYPE = {
   "image/png": "png",
@@ -32,6 +36,7 @@ multer accepts single file which will have 'image' as key in its payload and app
 */
 router.post(
   "",
+  checkAuthMiddleware,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
@@ -83,7 +88,7 @@ router.get("/:id", (req, res, next) => {
   });
 });
 
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", checkAuthMiddleware, (req, res, next) => {
   console.log("id", req.params.id);
   Post.deleteOne({ _id: req.params.id })
     .then(result => res.status(200).json("Post deleted"))
@@ -92,6 +97,7 @@ router.delete("/:id", (req, res, next) => {
 
 router.put(
   "/:id",
+  checkAuthMiddleware,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     let imagePath = req.body.imagePath;

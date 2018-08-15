@@ -1,7 +1,8 @@
+import { AuthInterceptor } from './components/auth/auth-interceptor';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 
 import {
@@ -46,7 +47,11 @@ import { SingnUpComponent } from './components/auth/singn-up/singn-up.component'
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    // Angular provided HTTP_INTERCEPTORS let angular know to add custom interceptor using useClass
+    // If there are multiple interceptors, angular will add another instead of overriding current one
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

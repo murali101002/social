@@ -1,7 +1,7 @@
-import { Post } from './../post.model';
+import { Post } from '../post.model';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PostService } from '../../../services/post/post.service';
-import { FormGroup, Validators, FormControl } from '../../../../../node_modules/@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { mimeType } from '../../../shared/mime-type.validator';
 
