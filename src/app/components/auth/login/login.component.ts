@@ -1,3 +1,4 @@
+import { OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from './../../../services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
@@ -8,7 +9,7 @@ import { NgForm } from '@angular/forms';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   isLoading = false;
   private authSubs: Subscription;
@@ -30,6 +31,9 @@ export class LoginComponent implements OnInit {
       if (isAuthenticated) {
       }
     });
+  }
+  ngOnDestroy(): void {
+    this.authSubs.unsubscribe();
   }
 
 }

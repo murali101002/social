@@ -43,7 +43,8 @@ router.post(
     const post = Post({
       title: req.body.title,
       content: req.body.content,
-      imagePath: url + "/images/" + req.file.filename
+      imagePath: url + "/images/" + req.file.filename,
+      creator: req.userData.userId
     });
     post.save().then(result => {
       console.log(result);
@@ -90,8 +91,14 @@ router.get("/:id", (req, res, next) => {
 
 router.delete("/:id", checkAuthMiddleware, (req, res, next) => {
   console.log("id", req.params.id);
-  Post.deleteOne({ _id: req.params.id })
-    .then(result => res.status(200).json("Post deleted"))
+  Post.deleteOne({ _id: req.params.id, creator: req.userData.userId })
+    .then(result => {
+      if (result.n > 0) {
+        res.status(200).json("Post deleted")
+      } else {
+        res.status(401).json("Not authorized")
+      }
+    })
     .catch(error => console.log(error));
 });
 
@@ -109,11 +116,15 @@ router.put(
       _id: req.body.id,
       title: req.body.title,
       content: req.body.content,
-      imagePath: imagePath
+      imagePath: imagePath,
+      creator: req.userData.userId
     });
-    Post.updateOne({ _id: req.params.id }, post).then(result => {
-      console.log(result);
-      res.status(200).json({ message: "Updated Successful" });
+    Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post).then(result => {
+      if (result.nModified > 0) {
+        res.status(200).json({ message: "Updated Successful" });
+      } else {
+        res.status(401).json({ message: "Not Authorized" });
+      }
     });
   }
 );

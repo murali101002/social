@@ -47,7 +47,7 @@ router.post("/login", (req, res, next) => {
         "this_should_be_long_to_verify_jwt_on_server",
         { expiresIn: "1hr" }
       );
-      return res.status(200).json({ token: token, expiresIn: 3600 });
+      return res.status(200).json({ token: token, expiresIn: 3600, userId: fetchedUser._id });
     })
     .catch(err => {
       res.status(404).json({error: err});
