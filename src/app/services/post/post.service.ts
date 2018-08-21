@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { Post } from "../../components/posts/post.model";
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
@@ -9,6 +10,7 @@ import { Router } from "@angular/router";
 export class PostService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<{ posts: Post[]; postsCount: number }>();
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -16,7 +18,7 @@ export class PostService {
     const queryParams = `?pagesize=${pageSize}&page=${currPage}`;
     return this.http
       .get<{ posts: any; postsCount: number }>(
-        "http://localhost:3000/api/posts" + queryParams
+        `${this.baseUrl}/posts` + queryParams
       )
       .pipe(
         map(postsData => {
@@ -53,7 +55,7 @@ export class PostService {
     postData.append("content", content);
     postData.append("image", image, title);
     this.http
-      .post<string>("http://localhost:3000/api/posts", postData)
+      .post<string>(`${this.baseUrl}/posts`, postData)
       .subscribe(postId => {
         // const post = {id: postId, title: title, content: content, imagePath: null};
         // post.id = postId;
@@ -70,7 +72,7 @@ export class PostService {
       content: string;
       imagePath: string;
       creator: string;
-    }>(`http://localhost:3000/api/posts/${postId}`);
+    }>(`${this.baseUrl}/posts/${postId}`);
   }
 
   updatePost(
@@ -97,13 +99,13 @@ export class PostService {
     }
     // const post: Post = {id: postId, title: title, content: content};
     this.http
-      .put(`http://localhost:3000/api/posts/${postId}`, postData)
+      .put(`${this.baseUrl}/posts/${postId}`, postData)
       .subscribe(() => {
         this.router.navigate(["/"]);
       });
   }
 
   deletePost(postId) {
-    return this.http.delete(`http://localhost:3000/api/posts/${postId}`);
+    return this.http.delete(`${this.baseUrl}/posts/${postId}`);
   }
 }

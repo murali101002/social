@@ -11,7 +11,7 @@ const usersRoutes = require('./routes/users');
 
 
 mongoose.connect(
-  "mongodb+srv://murali:nanisiri@cluster0-wb7kl.mongodb.net/mean-app?retryWrites=true"
+  "mongodb+srv://murali:" + process.env.MONGO_ATLAS_PWD + "@cluster0-wb7kl.mongodb.net/mean-app?retryWrites=true"
 );
 
 // bodyParser allows us to fetch post data
