@@ -11,7 +11,7 @@ import { NgForm } from "@angular/forms";
 })
 export class SingnUpComponent implements OnInit, OnDestroy {
   isLoading = false;
-  private authSubs: Subscription;
+  private authSubs: Subscription = new Subscription();
 
   constructor(private authService: AuthService) {}
 

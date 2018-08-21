@@ -12,7 +12,7 @@ import { NgForm } from '@angular/forms';
 export class LoginComponent implements OnInit, OnDestroy {
 
   isLoading = false;
-  private authSubs: Subscription;
+  private authSubs: Subscription = new Subscription();
 
   constructor(private authService: AuthService) { }
 
